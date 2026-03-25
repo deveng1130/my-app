@@ -5,20 +5,42 @@ import pandas as pd
 data_dir = os.path.join(os.path.dirname(__file__), "../data")
 os.makedirs(data_dir, exist_ok=True)
 
-# Load the downloaded files
-teams_path = os.path.join(data_dir, "teams.csv")
-players_path = os.path.join(data_dir, "player_stats_week7_2025.csv")
+# Load all player stats files
+all_players = []
+for week in range(1, 19):
+    week_path = os.path.join(data_dir, f"player_stats_week{week}_2025.csv")
+    if os.path.exists(week_path):
+        df = pd.read_csv(week_path)
+        all_players.append(df)
 
+if all_players:
+    players = pd.concat(all_players, ignore_index=True)
+else:
+    print("No player data found")
+    exit()
+
+# Load teams
+teams_path = os.path.join(data_dir, "teams.csv")
 teams = pd.read_csv(teams_path)
-players = pd.read_csv(players_path)
+
+# Aggregate by player (sum stats across weeks)
+players_agg = players.groupby(['PlayerID', 'Name', 'Team']).agg({
+    'PassingYards': 'sum',
+    'RushingYards': 'sum',
+    'ReceivingYards': 'sum',
+    'Touchdowns': 'sum',
+    'FumblesLost': 'sum'
+}).reset_index()
+
+players = players_agg
 
 # Keep only important columns
 columns = [
-    'PlayerID', 'Name', 'Team', 'Week', 
+    'PlayerID', 'Name', 'Team', 
     'PassingYards', 'RushingYards', 'ReceivingYards', 
     'Touchdowns', 'FumblesLost'
 ]
-players = players[[c for c in columns if c in players.columns]]
+players = players[columns]
 
 # Fill missing values
 players.fillna(0, inplace=True)
