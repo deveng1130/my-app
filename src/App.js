@@ -17,7 +17,6 @@ function Prediction({ onBack, teams, teamStats }) {
   const [awayTeam, setAwayTeam] = useState(teams[1] || '');
   const [result, setResult] = useState({ winner: null, pct: null, error: null });
 
-  // Get rating from stats
   const getRating = useCallback((name) => {
     return teamStats[name]?.rating || 0;
   }, [teamStats]);
@@ -49,7 +48,6 @@ function Prediction({ onBack, teams, teamStats }) {
     }
     const recordHome = teamStats[homeTeam]?.recordPct || 0.5;
     const recordAway = teamStats[awayTeam]?.recordPct || 0.5;
-    // Use direct ratio of normalized ratings for simpler 'normal' prediction
     const homeScore = rHome + 1.2 + (recordHome - 0.5) * 4;
     const awayScore = rAway + (recordAway - 0.5) * 4;
     const totalScore = homeScore + awayScore;
@@ -93,7 +91,7 @@ function Prediction({ onBack, teams, teamStats }) {
             <div className="error">{result.error}</div>
           ) : (
             <div>
-              Predicted winner: <strong>{result.winner}</strong>
+              <div>Predicted winner: <strong>{result.winner}</strong></div>
               <div>{homeTeam} win probability: <strong>{result.pctHome}%</strong></div>
               <div>{awayTeam} win probability: <strong>{result.pctAway}%</strong></div>
             </div>
@@ -116,7 +114,6 @@ function App() {
   const [teamMap, setTeamMap] = useState({});
 
   useEffect(() => {
-    // Load teams first (names + key map)
     fetch('/all_teams.csv')
       .then(response => response.text())
       .then(csv => {
@@ -140,7 +137,6 @@ function App() {
   useEffect(() => {
     if (!Object.keys(teamMap).length) return;
 
-    // Load player stats and aggregate by team after teamMap is ready
     fetch('/cleaned_nfl_data.csv')
       .then(response => response.text())
       .then(csv => {
@@ -164,7 +160,6 @@ function App() {
               const fumScore = stats[team].fumbles * -3;
               stats[team].rating = yardsScore + tdScore + fumScore;
             });
-            // Derive an estimated record from ratings (0.35..0.65 range)
             const ratingValues = Object.values(stats).map((v) => v.rating);
             const minRating = Math.min(...ratingValues);
             const maxRating = Math.max(...ratingValues);
@@ -189,4 +184,3 @@ function App() {
 }
 
 export default App;
-
