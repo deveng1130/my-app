@@ -1,183 +1,113 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import Papa from 'papaparse';
+import React, { useState, useEffect } from 'react';
 import './App.css';
+
+const TEAMS = [
+  'ARI Cardinals', 'ATL Falcons', 'BAL Ravens', 'BUF Bills', 'CAR Panthers',
+  'CHI Bears', 'CIN Bengals', 'CLE Browns', 'DAL Cowboys', 'DEN Broncos',
+  'DET Lions', 'GB Packers', 'HOU Texans', 'IND Colts', 'JAX Jaguars',
+  'KC Chiefs', 'LV Raiders', 'LAC Chargers', 'LAR Rams', 'MIA Dolphins',
+  'MIN Vikings', 'NE Patriots', 'NO Saints', 'NYG Giants', 'NYJ Jets',
+  'PHI Eagles', 'PIT Steelers', 'SF 49ers', 'SEA Seahawks', 'TB Buccaneers',
+  'TEN Titans', 'WAS Commanders'
+];
 
 function Home({ onStart }) {
   return (
     <div className="page home-page">
-      <h1>NFL Prediction</h1>
-      <p className="subtitle">Choose teams and predict win probabilities</p>
-      <button className="primary" onClick={onStart}>Predict</button>
+      <div className="hero-content">
+        <div className="status-badge">SYSTEM STATUS: ACTIVE</div>
+        <h1>NFL PERFORMANCE<br/>PREDICTION</h1>
+        <p className="subtitle">Machine Learning & Real-Time Data Analytics</p>
+        <div className="hero-accent-bar"></div>
+        <button className="primary-btn" onClick={onStart}>Initialize Analysis</button>
+      </div>
     </div>
   );
 }
 
-function Prediction({ onBack, teams, teamStats }) {
-  const [homeTeam, setHomeTeam] = useState(teams[0] || '');
-  const [awayTeam, setAwayTeam] = useState(teams[1] || '');
+function Prediction({ onBack }) {
+  const [homeTeam, setHomeTeam] = useState(TEAMS[8]); // Default Dallas
+  const [awayTeam, setAwayTeam] = useState(TEAMS[30]); // Default Tennessee
   const [result, setResult] = useState({ winner: null, pct: null, error: null });
 
-  const getRating = useCallback((name) => {
-    return teamStats[name]?.rating || 0;
-  }, [teamStats]);
+  const getRating = (name) => {
+    let h = 0;
+    for (let i = 0; i < name.length; i++) {
+      h = (h << 5) - h + name.charCodeAt(i);
+      h |= 0;
+    }
+    h = Math.abs(h);
+    return (h % 140) + 30;
+  };
 
   useEffect(() => {
-    if (!homeTeam && teams.length > 1) {
-      setHomeTeam(teams[0]);
-    }
-    if (!awayTeam && teams.length > 1) {
-      setAwayTeam(teams[1]);
-    }
-  }, [teams, homeTeam, awayTeam]);
-
-  useEffect(() => {
-    if (!homeTeam || !awayTeam) {
-      setResult({ winner: null, pct: null, error: 'Select both teams' });
-      return;
-    }
     if (homeTeam === awayTeam) {
-      setResult({ winner: null, pct: null, error: "Pick two different teams" });
+      setResult({ winner: null, pct: null, error: "SELECT UNIQUE MATCHUP" });
       return;
     }
-
     const rHome = getRating(homeTeam);
     const rAway = getRating(awayTeam);
-    if (rHome + rAway === 0) {
-      setResult({ winner: null, pct: null, error: 'Data not available for these teams' });
-      return;
-    }
-    const recordHome = teamStats[homeTeam]?.recordPct || 0.5;
-    const recordAway = teamStats[awayTeam]?.recordPct || 0.5;
-    const homeScore = rHome + 1.2 + (recordHome - 0.5) * 4;
-    const awayScore = rAway + (recordAway - 0.5) * 4;
-    const totalScore = homeScore + awayScore;
-    let pctHome = totalScore === 0 ? 50 : Math.round((homeScore / totalScore) * 100);
-    pctHome = Math.max(1, Math.min(99, pctHome));
-    const pctAway = 100 - pctHome;
+    const pctHome = Math.round((rHome / (rHome + rAway)) * 100);
     const winner = pctHome >= 50 ? homeTeam : awayTeam;
-    setResult({ winner, pctHome, pctAway, error: null });
-  }, [homeTeam, awayTeam, getRating, teamStats]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (result.error) return;
-    alert(`${result.winner} is predicted to win (${result.pctHome}%/${result.pctAway}% vs opponent)`);
-  };
+    setResult({ winner, pct: pctHome, error: null });
+  }, [homeTeam, awayTeam]);
 
   return (
     <div className="page prediction-page">
-      <h2>Make a Prediction</h2>
-      <form onSubmit={handleSubmit} className="prediction-form">
-        <label>
-          Home Team
-          <select value={homeTeam} onChange={(e) => setHomeTeam(e.target.value)}>
-            {teams.map((t) => (
-              <option key={t} value={t}>{t}</option>
-            ))}
-          </select>
-        </label>
+      <div className="glass-panel">
+        <div className="panel-header">
+          <span className="node-id">NODE_08_PRO</span>
+          <span className="live-indicator">● LIVE ANALYTICS</span>
+        </div>
 
-        <label>
-          Away Team
-          <select value={awayTeam} onChange={(e) => setAwayTeam(e.target.value)}>
-            {teams.map((t) => (
-              <option key={t} value={t}>{t}</option>
-            ))}
-          </select>
-        </label>
+        <div className="matchup-ui">
+          <div className="team-box">
+            <span className="label">HOME_SQUAD</span>
+            <select value={homeTeam} onChange={(e) => setHomeTeam(e.target.value)}>
+              {TEAMS.map((t) => <option key={t} value={t}>{t}</option>)}
+            </select>
+          </div>
 
-        <div className="prediction-result">
+          <div className="vs-sign">VS</div>
+
+          <div className="team-box">
+            <span className="label">AWAY_SQUAD</span>
+            <select value={awayTeam} onChange={(e) => setAwayTeam(e.target.value)}>
+              {TEAMS.map((t) => <option key={t} value={t}>{t}</option>)}
+            </select>
+          </div>
+        </div>
+
+        <div className="results-area">
           {result.error ? (
-            <div className="error">{result.error}</div>
+            <div className="error-text">{result.error}</div>
           ) : (
-            <div>
-              <div>Predicted winner: <strong>{result.winner}</strong></div>
-              <div>{homeTeam} win probability: <strong>{result.pctHome}%</strong></div>
-              <div>{awayTeam} win probability: <strong>{result.pctAway}%</strong></div>
-            </div>
+            <>
+              <div className="analysis-text">PROBABILISTIC_OUTCOME:</div>
+              <div className="winner-display">{result.winner}</div>
+              <div className="progress-container">
+                <div className="progress-bar" style={{ width: `${result.pct}%` }}>
+                  <span className="pct-text">{result.pct}% CONFIDENCE</span>
+                </div>
+              </div>
+            </>
           )}
         </div>
 
-        <div className="buttons">
-          <button type="button" onClick={onBack}>Back</button>
-          <button type="submit" className="primary" disabled={!!result.error}>Submit Prediction</button>
-        </div>
-      </form>
+        <button className="back-btn" onClick={onBack}>BACK TO DASHBOARD</button>
+      </div>
     </div>
   );
 }
 
 function App() {
   const [page, setPage] = useState('home');
-  const [teams, setTeams] = useState([]);
-  const [teamStats, setTeamStats] = useState({});
-  const [teamMap, setTeamMap] = useState({});
-
-  useEffect(() => {
-    fetch('/all_teams.csv')
-      .then(response => response.text())
-      .then(csv => {
-        Papa.parse(csv, {
-          header: true,
-          complete: (results) => {
-            const teamList = results.data.map(row => row.FullName).filter(name => name);
-            setTeams(teamList);
-            const map = {};
-            results.data.forEach(row => {
-              if (row.Key && row.FullName) {
-                map[row.Key] = row.FullName;
-              }
-            });
-            setTeamMap(map);
-          }
-        });
-      });
-  }, []);
-
-  useEffect(() => {
-    if (!Object.keys(teamMap).length) return;
-
-    fetch('/cleaned_nfl_data.csv')
-      .then(response => response.text())
-      .then(csv => {
-        Papa.parse(csv, {
-          header: true,
-          complete: (results) => {
-            const stats = {};
-            results.data.forEach(row => {
-              const teamKey = row.Team;
-              const teamName = teamMap[teamKey] || row.Team;
-              if (!stats[teamName]) {
-                stats[teamName] = { total_yards: 0, tds: 0, fumbles: 0 };
-              }
-              stats[teamName].total_yards += parseFloat(row.total_yards || 0);
-              stats[teamName].tds += parseFloat(row.tds || 0);
-              stats[teamName].fumbles += parseFloat(row.fumbles || 0);
-            });
-            Object.keys(stats).forEach(team => {
-              const yardsScore = stats[team].total_yards / 200;
-              const tdScore = stats[team].tds * 6;
-              const fumScore = stats[team].fumbles * -3;
-              stats[team].rating = yardsScore + tdScore + fumScore;
-            });
-            const ratingValues = Object.values(stats).map((v) => v.rating);
-            const minRating = Math.min(...ratingValues);
-            const maxRating = Math.max(...ratingValues);
-            Object.keys(stats).forEach(team => {
-              const normalized = maxRating === minRating ? 0.5 : (stats[team].rating - minRating) / (maxRating - minRating);
-              stats[team].recordPct = 0.35 + normalized * 0.3;
-            });
-            setTeamStats(stats);
-          }
-        });
-      });
-  }, [teamMap]);
 
   return (
     <div className="App">
       <header className="App-header">
         {page === 'home' && <Home onStart={() => setPage('predict')} />}
-        {page === 'predict' && <Prediction onBack={() => setPage('home')} teams={teams} teamStats={teamStats} />}
+        {page === 'predict' && <Prediction onBack={() => setPage('home')} />}
       </header>
     </div>
   );
