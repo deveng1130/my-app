@@ -24,7 +24,7 @@ teams_path = os.path.join(data_dir, "teams.csv")
 teams = pd.read_csv(teams_path)
 
 # Aggregate by player (sum stats across weeks)
-players_agg = players.groupby(['PlayerID', 'Name', 'Team']).agg({
+players_agg = players.groupby(['PlayerID', 'Name', 'Team', 'Position']).agg({
     'PassingYards': 'sum',
     'RushingYards': 'sum',
     'ReceivingYards': 'sum',
@@ -36,7 +36,7 @@ players = players_agg
 
 # Keep only important columns
 columns = [
-    'PlayerID', 'Name', 'Team', 
+    'PlayerID', 'Name', 'Team', 'Position',
     'PassingYards', 'RushingYards', 'ReceivingYards', 
     'Touchdowns', 'FumblesLost'
 ]
