@@ -24,20 +24,14 @@ const STAT_OPTIONS = {
     { value: 'receptions', label: 'Receptions', unit: 'rec', max: 15 },
     { value: 'receivingTDs', label: 'Receiving TDs', unit: 'TDs', max: 5 },
   ],
-  LB: [
-    { value: 'tackles', label: 'Tackles', unit: 'Tkls', max: 20 },
+  DL: [
+    { value: 'tackles', label: 'Tackles', unit: 'Tkls', max: 12 },
     { value: 'sacks', label: 'Sacks', unit: 'Sacks', max: 5 },
-    { value: 'interceptions', label: 'Interceptions', unit: 'INTs', max: 3 },
-    { value: 'forcedFumbles', label: 'Forced Fumbles', unit: 'FF', max: 3 },
-  ],
-  CB: [
-    { value: 'tackles', label: 'Tackles', unit: 'Tkls', max: 15 },
-    { value: 'interceptions', label: 'Interceptions', unit: 'INTs', max: 3 },
     { value: 'forcedFumbles', label: 'Forced Fumbles', unit: 'FF', max: 2 },
   ],
-  S: [
-    { value: 'tackles', label: 'Tackles', unit: 'Tkls', max: 15 },
-    { value: 'interceptions', label: 'Interceptions', unit: 'INTs', max: 3 },
+  DE: [
+    { value: 'tackles', label: 'Tackles', unit: 'Tkls', max: 12 },
+    { value: 'sacks', label: 'Sacks', unit: 'Sacks', max: 6 },
     { value: 'forcedFumbles', label: 'Forced Fumbles', unit: 'FF', max: 2 },
   ],
   DT: [
@@ -45,15 +39,64 @@ const STAT_OPTIONS = {
     { value: 'sacks', label: 'Sacks', unit: 'Sacks', max: 4 },
     { value: 'forcedFumbles', label: 'Forced Fumbles', unit: 'FF', max: 2 },
   ],
-  DE: [
+  NT: [
     { value: 'tackles', label: 'Tackles', unit: 'Tkls', max: 10 },
-    { value: 'sacks', label: 'Sacks', unit: 'Sacks', max: 4 },
+    { value: 'sacks', label: 'Sacks', unit: 'Sacks', max: 3 },
     { value: 'forcedFumbles', label: 'Forced Fumbles', unit: 'FF', max: 2 },
   ],
   EDGE: [
-    { value: 'tackles', label: 'Tackles', unit: 'Tkls', max: 10 },
-    { value: 'sacks', label: 'Sacks', unit: 'Sacks', max: 4 },
+    { value: 'tackles', label: 'Tackles', unit: 'Tkls', max: 15 },
+    { value: 'sacks', label: 'Sacks', unit: 'Sacks', max: 6 },
     { value: 'forcedFumbles', label: 'Forced Fumbles', unit: 'FF', max: 2 },
+  ],
+  LB: [
+    { value: 'tackles', label: 'Tackles', unit: 'Tkls', max: 18 },
+    { value: 'sacks', label: 'Sacks', unit: 'Sacks', max: 4 },
+    { value: 'interceptions', label: 'Interceptions', unit: 'INTs', max: 3 },
+    { value: 'forcedFumbles', label: 'Forced Fumbles', unit: 'FF', max: 2 },
+  ],
+  MLB: [
+    { value: 'tackles', label: 'Tackles', unit: 'Tkls', max: 20 },
+    { value: 'sacks', label: 'Sacks', unit: 'Sacks', max: 4 },
+    { value: 'interceptions', label: 'Interceptions', unit: 'INTs', max: 3 },
+  ],
+  ILB: [
+    { value: 'tackles', label: 'Tackles', unit: 'Tkls', max: 18 },
+    { value: 'sacks', label: 'Sacks', unit: 'Sacks', max: 3 },
+    { value: 'interceptions', label: 'Interceptions', unit: 'INTs', max: 3 },
+  ],
+  OLB: [
+    { value: 'tackles', label: 'Tackles', unit: 'Tkls', max: 15 },
+    { value: 'sacks', label: 'Sacks', unit: 'Sacks', max: 6 },
+    { value: 'interceptions', label: 'Interceptions', unit: 'INTs', max: 3 },
+  ],
+  S: [
+    { value: 'tackles', label: 'Tackles', unit: 'Tkls', max: 15 },
+    { value: 'interceptions', label: 'Interceptions', unit: 'INTs', max: 4 },
+    { value: 'forcedFumbles', label: 'Forced Fumbles', unit: 'FF', max: 2 },
+  ],
+  DB: [
+    { value: 'tackles', label: 'Tackles', unit: 'Tkls', max: 12 },
+    { value: 'interceptions', label: 'Interceptions', unit: 'INTs', max: 4 },
+    { value: 'forcedFumbles', label: 'Forced Fumbles', unit: 'FF', max: 2 },
+  ],
+  CB: [
+    { value: 'tackles', label: 'Tackles', unit: 'Tkls', max: 12 },
+    { value: 'interceptions', label: 'Interceptions', unit: 'INTs', max: 4 },
+    { value: 'forcedFumbles', label: 'Forced Fumbles', unit: 'FF', max: 2 },
+  ],
+  FS: [
+    { value: 'tackles', label: 'Tackles', unit: 'Tkls', max: 12 },
+    { value: 'interceptions', label: 'Interceptions', unit: 'INTs', max: 4 },
+  ],
+  SS: [
+    { value: 'tackles', label: 'Tackles', unit: 'Tkls', max: 12 },
+    { value: 'interceptions', label: 'Interceptions', unit: 'INTs', max: 4 },
+    { value: 'forcedFumbles', label: 'Forced Fumbles', unit: 'FF', max: 2 },
+  ],
+  NB: [
+    { value: 'tackles', label: 'Tackles', unit: 'Tkls', max: 12 },
+    { value: 'interceptions', label: 'Interceptions', unit: 'INTs', max: 4 },
   ],
 };
 
@@ -146,6 +189,29 @@ const normalCDF = (x) => {
   return 0.5 * (1.0 + sign * y);
 };
 
+const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+
+// Sportsbook-ish: shade extremes + small vig + round to half-percent.
+const sportsbookifyProbability = (pTrue) => {
+  const p = clamp(pTrue / 100, 0, 1);
+
+  // Pull extreme model outputs slightly toward 50% (books rarely show 95%+).
+  // gamma > 1 compresses toward 0.5.
+  const gamma = 1.25;
+  const centered = 0.5 + Math.sign(p - 0.5) * Math.pow(Math.abs(p - 0.5) / 0.5, 1 / gamma) * 0.5;
+
+  // Add a tiny "vig" effect by shrinking edges a bit more.
+  const vig = 0.02; // ~2%
+  const shaded = 0.5 + (centered - 0.5) * (1 - vig);
+
+  // Cap range for display realism
+  const capped = clamp(shaded, 0.03, 0.87);
+  const pct = capped * 100;
+
+  // Round to 0.5% increments to reduce ties vs integer rounding
+  return Math.round(pct * 2) / 2;
+};
+
 // Calculate probability of exceeding a threshold using normal distribution
 const calculateThresholdProbability = (mean, stdDev, threshold) => {
   if (stdDev === 0) {
@@ -153,8 +219,7 @@ const calculateThresholdProbability = (mean, stdDev, threshold) => {
   }
   const zScore = (threshold - mean) / stdDev;
   const probability = (1 - normalCDF(zScore)) * 100;
-  let finalProbability = Math.max(1, Math.min(85, Math.round(probability))); // Cap at 85% for betting realism
-  return finalProbability;
+  return sportsbookifyProbability(probability);
 };
 
 // Calculate standard deviation from a value (estimate based on typical player variance)
@@ -231,6 +296,8 @@ function App() {
   const [players, setPlayers] = useState([]);
   const [teams, setTeams] = useState([]);
   const [teamMap, setTeamMap] = useState({});
+  const [playerGameLogs, setPlayerGameLogs] = useState([]);
+  const [teamSeasonRanks, setTeamSeasonRanks] = useState({});
   const [playerSearch, setPlayerSearch] = useState('');
   const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [selectedTeam, setSelectedTeam] = useState('');
@@ -294,7 +361,168 @@ function App() {
           },
         });
       });
+
+    fetch('/player_game_logs_2025.csv')
+      .then((response) => {
+        if (!response.ok) throw new Error('Missing player_game_logs_2025.csv');
+        return response.text();
+      })
+      .then((csv) => {
+        Papa.parse(csv, {
+          header: true,
+          skipEmptyLines: true,
+          complete: (results) => {
+            const rows = results.data
+              .filter((row) => row.PlayerID && row.Name && row.Team)
+              .map((row) => ({
+                ...row,
+                PlayerID: Number(row.PlayerID),
+                Week: Number(row.Week || 0),
+                PassingYards: Number(row.PassingYards || 0),
+                PassingTouchdowns: Number(row.PassingTouchdowns || 0),
+                PassingInterceptions: Number(row.PassingInterceptions || 0),
+                RushingYards: Number(row.RushingYards || 0),
+                RushingTouchdowns: Number(row.RushingTouchdowns || 0),
+                ReceivingYards: Number(row.ReceivingYards || 0),
+                Receptions: Number(row.Receptions || 0),
+                ReceivingTouchdowns: Number(row.ReceivingTouchdowns || 0),
+                Tackles: Number(row.Tackles || 0),
+                Sacks: Number(row.Sacks || 0),
+                FumblesForced: Number(row.FumblesForced || 0),
+                Interceptions: Number(row.Interceptions || 0),
+                Played: Number(row.Played || 0),
+                DeclaredInactive: Number(row.DeclaredInactive || 0),
+              }));
+            setPlayerGameLogs(rows);
+          },
+        });
+      })
+      .catch(() => {
+        // Optional file; app can still run with season aggregates only.
+        setPlayerGameLogs([]);
+      });
+
+    fetch('/team_season_ranks_2025.csv')
+      .then((response) => {
+        if (!response.ok) throw new Error('Missing team_season_ranks_2025.csv');
+        return response.text();
+      })
+      .then((csv) => {
+        Papa.parse(csv, {
+          header: true,
+          skipEmptyLines: true,
+          complete: (results) => {
+            const map = {};
+            results.data.forEach((row) => {
+              if (!row.Team) return;
+              map[row.Team] = {
+                passRank: Number(row.passRank || 16),
+                rushRank: Number(row.rushRank || 16),
+                pointsPerGame: Number(row.PointsPerGame || 22),
+              };
+            });
+            setTeamSeasonRanks(map);
+          },
+        });
+      })
+      .catch(() => {
+        setTeamSeasonRanks({});
+      });
   }, []);
+
+  const getRecentGameAvg = (player, stat, nGames) => {
+    if (!player || !playerGameLogs.length) return 0;
+    const pid = Number(player.PlayerID);
+    const team = player.Team;
+    const games = playerGameLogs
+      .filter((g) => Number(g.PlayerID) === pid && g.Team === team && Number(g.Played || 0) === 1)
+      .sort((a, b) => Number(b.Week) - Number(a.Week))
+      .slice(0, nGames);
+    if (!games.length) return 0;
+
+    const values = games.map((g) => {
+      switch (stat) {
+        case 'passingYards':
+          return Number(g.PassingYards || 0);
+        case 'passingTDs':
+          return Number(g.PassingTouchdowns || 0);
+        case 'interceptions':
+          // Offense: use PassingInterceptions; Defense: use Interceptions
+          if (player.Position && ['CB', 'S', 'LB', 'DE', 'DT', 'EDGE', 'MLB', 'OLB', 'ILB', 'DB', 'FS', 'SS', 'NB', 'DL', 'NT'].includes(player.Position)) {
+            return Number(g.Interceptions || 0);
+          }
+          return Number(g.PassingInterceptions || 0);
+        case 'rushingYards':
+          return Number(g.RushingYards || 0);
+        case 'rushingTDs':
+          return Number(g.RushingTouchdowns || 0);
+        case 'receivingYards':
+          return Number(g.ReceivingYards || 0);
+        case 'receptions':
+          return Number(g.Receptions || 0);
+        case 'receivingTDs':
+          return Number(g.ReceivingTouchdowns || 0);
+        case 'tackles':
+          return Number(g.Tackles || 0);
+        case 'sacks':
+          return Number(g.Sacks || 0);
+        case 'forcedFumbles':
+          return Number(g.FumblesForced || 0);
+        default:
+          return 0;
+      }
+    });
+
+    const avg = values.reduce((a, b) => a + b, 0) / Math.max(values.length, 1);
+    return Math.round(avg * 10) / 10;
+  };
+
+  const getRecentGameStdDev = (player, stat, nGames) => {
+    if (!player || !playerGameLogs.length) return 0;
+    const pid = Number(player.PlayerID);
+    const team = player.Team;
+    const games = playerGameLogs
+      .filter((g) => Number(g.PlayerID) === pid && g.Team === team && Number(g.Played || 0) === 1)
+      .sort((a, b) => Number(b.Week) - Number(a.Week))
+      .slice(0, nGames);
+    if (games.length < 2) return 0;
+
+    const values = games.map((g) => {
+      switch (stat) {
+        case 'passingYards':
+          return Number(g.PassingYards || 0);
+        case 'passingTDs':
+          return Number(g.PassingTouchdowns || 0);
+        case 'interceptions':
+          if (player.Position && ['CB', 'S', 'LB', 'DE', 'DT', 'EDGE', 'MLB', 'OLB', 'ILB', 'DB', 'FS', 'SS', 'NB', 'DL', 'NT'].includes(player.Position)) {
+            return Number(g.Interceptions || 0);
+          }
+          return Number(g.PassingInterceptions || 0);
+        case 'rushingYards':
+          return Number(g.RushingYards || 0);
+        case 'rushingTDs':
+          return Number(g.RushingTouchdowns || 0);
+        case 'receivingYards':
+          return Number(g.ReceivingYards || 0);
+        case 'receptions':
+          return Number(g.Receptions || 0);
+        case 'receivingTDs':
+          return Number(g.ReceivingTouchdowns || 0);
+        case 'tackles':
+          return Number(g.Tackles || 0);
+        case 'sacks':
+          return Number(g.Sacks || 0);
+        case 'forcedFumbles':
+          return Number(g.FumblesForced || 0);
+        default:
+          return 0;
+      }
+    });
+
+    const mean = values.reduce((a, b) => a + b, 0) / values.length;
+    const variance = values.reduce((acc, v) => acc + Math.pow(v - mean, 2), 0) / (values.length - 1);
+    return Math.round(Math.sqrt(Math.max(0, variance)) * 10) / 10;
+  };
 
   const filteredPlayers = useMemo(() => {
     if (!playerSearch.trim()) return players.slice(0, 10);
@@ -340,21 +568,23 @@ function App() {
     if (!selectedPlayer || !selectedTeam) return;
     
     const opponentKey = teamMap[selectedTeam];
-    const defense = MOCK_DEFENSE[opponentKey] || { passRank: 20, rushRank: 20, sacksAllowed: 2.5 };
+    const defense = teamSeasonRanks[opponentKey] || MOCK_DEFENSE[opponentKey] || { passRank: 20, rushRank: 20, sacksAllowed: 2.5 };
     
     // Step 1: Calculate season average
     const totalStat = getDerivedStat(selectedPlayer, statType);
     const seasonAvg = computeAverage(totalStat, 17);
     
-    // Step 2: Since we only have season totals, use season average as base
-    // No separate "recent" calculation since we don't have per-game data
+    // Step 2: Use recent games if available (otherwise fall back to season avg)
+    const recentGames = timeframe === 'Last 3 games' ? 3 : timeframe === 'Last 5 games' ? 5 : 17;
+    const recentAvg = recentGames === 17 ? seasonAvg : getRecentGameAvg(selectedPlayer, statType, recentGames) || seasonAvg;
     
     // Step 3: Calculate standard deviation
-    const stdDev = estimateStdDev(seasonAvg, statType);
+    const recentStdDev = recentGames === 17 ? 0 : getRecentGameStdDev(selectedPlayer, statType, recentGames);
+    const stdDev = recentStdDev > 0 ? recentStdDev : estimateStdDev(recentAvg, statType);
     
     // Step 4: Apply opponent defensive adjustment
     const defenseAdj = getDefenseAdjustment(defense, statType);
-    const defenseAdjustedAvg = seasonAvg * (1 + defenseAdj);
+    const defenseAdjustedAvg = recentAvg * (1 + defenseAdj);
     
     // Step 5: Apply location adjustment
     const locationAdj = getLocationAdjustment(location);
@@ -383,7 +613,7 @@ function App() {
       weatherImpact,
       injuryImpact,
       seasonAvg,
-      recentAvg: seasonAvg, // Use season avg as recent for display purposes
+      recentAvg,
       predictedPerformance: Math.round(finalPredictedPerformance * 10) / 10,
       stdDev: Math.round(stdDev * 10) / 10,
     });
@@ -393,10 +623,10 @@ function App() {
     if (!awayTeam || !homeTeam || awayTeam === homeTeam) return;
     const awayKey = teamMap[awayTeam];
     const homeKey = teamMap[homeTeam];
-    const awayOffense = MOCK_OFFENSE[awayKey] || { passRank: 16, rushRank: 16, pointsPerGame: 22 };
-    const homeOffense = MOCK_OFFENSE[homeKey] || { passRank: 16, rushRank: 16, pointsPerGame: 22 };
-    const awayDefense = MOCK_DEFENSE[awayKey] || { passRank: 16, rushRank: 16, sacksAllowed: 2.5 };
-    const homeDefense = MOCK_DEFENSE[homeKey] || { passRank: 16, rushRank: 16, sacksAllowed: 2.5 };
+    const awayOffense = teamSeasonRanks[awayKey] || MOCK_OFFENSE[awayKey] || { passRank: 16, rushRank: 16, pointsPerGame: 22 };
+    const homeOffense = teamSeasonRanks[homeKey] || MOCK_OFFENSE[homeKey] || { passRank: 16, rushRank: 16, pointsPerGame: 22 };
+    const awayDefense = teamSeasonRanks[awayKey] || MOCK_DEFENSE[awayKey] || { passRank: 16, rushRank: 16, sacksAllowed: 2.5 };
+    const homeDefense = teamSeasonRanks[homeKey] || MOCK_DEFENSE[homeKey] || { passRank: 16, rushRank: 16, sacksAllowed: 2.5 };
 
     // Combined strength: offensive rank (inverted) + defensive rank (inverted)
     const awayOffenseStrength = (33 - awayOffense.passRank) + (33 - awayOffense.rushRank);
@@ -419,7 +649,7 @@ function App() {
     });
   };
 
-  const last5Avg = selectedPlayer ? computeAverage(getDerivedStat(selectedPlayer, statType), 5) : 0;
+  const last5Avg = selectedPlayer ? (getRecentGameAvg(selectedPlayer, statType, 5) || computeAverage(getDerivedStat(selectedPlayer, statType), 5)) : 0;
   const seasonAvg = selectedPlayer ? computeAverage(getDerivedStat(selectedPlayer, statType), 17) : 0;
 
   const trendData = useMemo(() => {

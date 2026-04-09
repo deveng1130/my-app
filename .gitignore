@@ -21,3 +21,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# generated data exports (built from scripts/)
+/public/player_game_logs_*.csv
+/public/team_season_ranks_*.csv
