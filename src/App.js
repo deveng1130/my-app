@@ -24,6 +24,37 @@ const STAT_OPTIONS = {
     { value: 'receptions', label: 'Receptions', unit: 'rec', max: 15 },
     { value: 'receivingTDs', label: 'Receiving TDs', unit: 'TDs', max: 5 },
   ],
+  LB: [
+    { value: 'tackles', label: 'Tackles', unit: 'Tkls', max: 20 },
+    { value: 'sacks', label: 'Sacks', unit: 'Sacks', max: 5 },
+    { value: 'interceptions', label: 'Interceptions', unit: 'INTs', max: 3 },
+    { value: 'forcedFumbles', label: 'Forced Fumbles', unit: 'FF', max: 3 },
+  ],
+  CB: [
+    { value: 'tackles', label: 'Tackles', unit: 'Tkls', max: 15 },
+    { value: 'interceptions', label: 'Interceptions', unit: 'INTs', max: 3 },
+    { value: 'forcedFumbles', label: 'Forced Fumbles', unit: 'FF', max: 2 },
+  ],
+  S: [
+    { value: 'tackles', label: 'Tackles', unit: 'Tkls', max: 15 },
+    { value: 'interceptions', label: 'Interceptions', unit: 'INTs', max: 3 },
+    { value: 'forcedFumbles', label: 'Forced Fumbles', unit: 'FF', max: 2 },
+  ],
+  DT: [
+    { value: 'tackles', label: 'Tackles', unit: 'Tkls', max: 10 },
+    { value: 'sacks', label: 'Sacks', unit: 'Sacks', max: 4 },
+    { value: 'forcedFumbles', label: 'Forced Fumbles', unit: 'FF', max: 2 },
+  ],
+  DE: [
+    { value: 'tackles', label: 'Tackles', unit: 'Tkls', max: 10 },
+    { value: 'sacks', label: 'Sacks', unit: 'Sacks', max: 4 },
+    { value: 'forcedFumbles', label: 'Forced Fumbles', unit: 'FF', max: 2 },
+  ],
+  EDGE: [
+    { value: 'tackles', label: 'Tackles', unit: 'Tkls', max: 10 },
+    { value: 'sacks', label: 'Sacks', unit: 'Sacks', max: 4 },
+    { value: 'forcedFumbles', label: 'Forced Fumbles', unit: 'FF', max: 2 },
+  ],
 };
 
 const THRESHOLD_PRESETS = [50, 100, 150, 200];
@@ -160,6 +191,10 @@ const getDerivedStat = (player, stat) => {
     case 'passingTDs':
       return Math.round(player.tds || 0);
     case 'interceptions':
+      // For defense, use player.interceptions; for offense, estimate from pass_yds
+      if (player.Position && ['CB', 'S', 'LB', 'DE', 'DT', 'EDGE'].includes(player.Position)) {
+        return Math.round(player.interceptions || 0);
+      }
       return Math.max(0, Math.round((player.pass_yds || 0) / 450));
     case 'rushingYards':
       return Math.round(player.rush_yds || 0);
@@ -171,6 +206,12 @@ const getDerivedStat = (player, stat) => {
       return Math.round((player.recv_yds || 0) / 12);
     case 'receivingTDs':
       return Math.round((player.tds || 0) * 0.4);
+    case 'tackles':
+      return Math.round(player.tackles || 0);
+    case 'sacks':
+      return Math.round(player.sacks || 0);
+    case 'forcedFumbles':
+      return Math.round(player.forced_fumbles || player.forcedFumbles || 0);
     default:
       return 0;
   }
